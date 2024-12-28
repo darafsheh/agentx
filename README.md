@@ -11,7 +11,7 @@
 </div>
 
 ## Agent X
-This is a fork of Eliza, built by Shar Dara to provide crypto trader X agent to everyone.
+(NEW) This is a fork of Eliza, built by Shar Dara to provide crypto trader X agent to everyone.
 
 ## 🌍 README Translations
 
