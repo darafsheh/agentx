@@ -106,6 +106,70 @@ export class DirectClient {
             file?: Express.Multer.File;
         }
 
+        //Get new user id based on their browser
+        const generateBrowserUserId = (providedUserId?: string): string => {
+            return providedUserId || `browser-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        };
+
+        // New initialization endpoint
+        this.app.post(
+            "/:agentId/init-session",
+            async (req: express.Request, res: express.Response) => {
+                const agentId = req.params.agentId;
+                const browserUserId = generateBrowserUserId(req.body.userId);
+                const userId = stringToUuid(browserUserId);
+                const roomId = stringToUuid("default-room-" + agentId);
+                console.log("NEW User ID: " + userId + " : " + roomId);
+
+                let runtime = this.agents.get(agentId);
+
+                // if runtime is null, look for runtime with the same name
+                if (!runtime) {
+                    runtime = Array.from(this.agents.values()).find(
+                        (a) => a.character.name.toLowerCase() === agentId.toLowerCase()
+                    );
+                }
+
+                if (!runtime) {
+                    res.status(404).send("Agent not found");
+                    console.log("Agent not found");
+                    return;
+                }
+
+                try {
+                    // Create or ensure browser user exists
+                    await runtime.ensureUserExists(
+                        userId,
+                        `Browser_${browserUserId}`, // username
+                        req.body.name || `Browser User ${browserUserId}`, // display name
+                        null, // email
+                        'browser' // source
+                    );
+
+                    // Ensure connection between browser user and agent
+                    await runtime.ensureConnection(
+                        userId,
+                        roomId,
+                        `Browser_${browserUserId}`,
+                        req.body.name || `Browser User ${browserUserId}`,
+                        'browser'
+                    );
+
+                    res.json({
+                        success: true,
+                        userId: browserUserId,
+                        roomId: roomId,
+                    });
+                } catch (error) {
+                    elizaLogger.error("Error initializing session:", error);
+                    res.status(500).json({
+                        success: false,
+                        error: "Failed to initialize session"
+                    });
+                }
+            }
+        );
+
         // Update the route handler to use CustomRequest instead of express.Request
         this.app.post(
             "/:agentId/whisper",
