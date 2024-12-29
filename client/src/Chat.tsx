@@ -43,7 +43,7 @@ export default function Chat() {
     const hasInitialized = useRef(false);
 
     useEffect(() => {
-        if (!hasInitialized.current) {
+        if (user) {
             hasInitialized.current = true;
             initMutation.mutate(); // Only runs once
         }
@@ -53,22 +53,22 @@ export default function Chat() {
 
     const initMutation = useMutation({
         mutationFn: async () => {
-            const storedUserId = localStorage.getItem('browserUserId');
-            console.log("INIT is getting called!!");
+            if (!user) throw new Error("No user found");
+
             const res = await fetch(`/api/${agentId}/init-session`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    userId: storedUserId,
+                    userId: user.id,
+                    name: user.fullName || user.username,
+                    email: user.primaryEmailAddress?.emailAddress
                 }),
             });
             const data = await res.json();
             if (data.success) {
-                localStorage.setItem('browserUserId', data.userId);
-                localStorage.setItem('roomId', data.roomId);
-                return { userId: data.userId, roomId: data.roomId };
+                return { userId: user.id, roomId: data.roomId };
             }
             throw new Error('Failed to initialize session');
         },
@@ -80,12 +80,13 @@ export default function Chat() {
 
     const mutation = useMutation({
         mutationFn: async (text: string) => {
-            if (!sessionIds) throw new Error("Session not initialized");
+            if (!user) throw new Error("User not initialized");
+
 
             const formData = new FormData();
             formData.append("text", text);
-            formData.append("userId", sessionIds.userId);     // Changed from "user"
-            formData.append("roomId", sessionIds.roomId);     // Changed from template string
+            formData.append("userId", user.id);  // Using Clerk user ID
+            formData.append("roomId", `default-room-${agentId}`);
             //formData.append("userId", "user");
             //formData.append("roomId", `default-room-${agentId}`);
 
@@ -133,7 +134,7 @@ export default function Chat() {
     };
 
     return (
-        <header>
+        <>
         <SignedOut>
             <SignInButton />
         </SignedOut>
@@ -236,7 +237,7 @@ export default function Chat() {
 
             </div>
         </SignedIn>
-        </header>
+        </>
 
 
     );

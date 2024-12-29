@@ -116,10 +116,8 @@ export class DirectClient {
             "/:agentId/init-session",
             async (req: express.Request, res: express.Response) => {
                 const agentId = req.params.agentId;
-                const browserUserId = generateBrowserUserId(req.body.userId);
-                const userId = stringToUuid(browserUserId);
-                const roomId = stringToUuid("default-room-" + agentId);
-                console.log("NEW User ID: " + userId + " : " + roomId);
+                const { userId, name, email } = req.body;
+                console.log("User ID: " + userId);
 
                 let runtime = this.agents.get(agentId);
 
@@ -137,28 +135,32 @@ export class DirectClient {
                 }
 
                 try {
+                    // Use stringToUuid on userId to ensure consistent UUID format
+                    const formattedUserId = stringToUuid(userId);
+                    const roomId = stringToUuid("default-room-" + agentId);
+
                     // Create or ensure browser user exists
                     await runtime.ensureUserExists(
-                        userId,
-                        `Browser_${browserUserId}`, // username
-                        req.body.name || `Browser User ${browserUserId}`, // display name
-                        null, // email
-                        'browser' // source
+                        formattedUserId,
+                        email,         // username from Clerk
+                        name,         // display name from Clerk
+                        email,        // email from Clerk
+                        'clerk'       // source
                     );
 
                     // Ensure connection between browser user and agent
                     await runtime.ensureConnection(
-                        userId,
+                        formattedUserId,
                         roomId,
-                        `Browser_${browserUserId}`,
-                        req.body.name || `Browser User ${browserUserId}`,
-                        'browser'
+                        name,
+                        name,
+                        'clerk'
                     );
 
                     res.json({
                         success: true,
-                        userId: browserUserId,
-                        roomId: roomId,
+                        userId: userId,
+                        roomId: roomId
                     });
                 } catch (error) {
                     elizaLogger.error("Error initializing session:", error);
