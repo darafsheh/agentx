@@ -44,8 +44,7 @@ function Agents() {
 
     const navigation = [
         { name: 'Home', href: '/' },
-        { name: 'Pricing', href: '#pricing' },
-        { name: 'Agents', href: '#agents' }
+        { name: 'Pricing', href: '#pricing' }
       ];
     const footerNavigation = {
     social: [
@@ -73,47 +72,42 @@ function Agents() {
         },
     ],
     }
-    const frequencies = [
-        { value: 'monthly', label: 'Monthly', priceSuffix: '/month' },
-        { value: 'annually', label: 'Annually', priceSuffix: '/year' },
-      ];
-    const [frequency, setFrequency] = useState(frequencies[0])
 
-      const tiers = [
-        {
-          name: 'Pricing Details',
-          id: 'tier-startup',
-          href: '#',
-          price: { monthly: '$29', annually: '$299' },
-          description: '',
-          features: [
-            '25 products',
-            'Up to 10,000 subscribers',
-            'Advanced analytics',
-            '24-hour support response time',
-            'Marketing automations',
-          ],
-          mostPopular: false,
-        }
-      ]
+    const tiers = [
+    {
+        name: 'Pricing Details',
+        id: 'tier-premium',
+        href: '#',
+        price: { monthly: '$29', annually: '$299' },
+        description: '',
+        features: [
+        '+10,000 reports on crypto projects',
+        'Daily alpha on porject updates',
+        'Access to private alpha channel',
+        'Alpha requests for new coins',
+        'Automated report updates',
+        ],
+        mostPopular: false,
+    }
+    ]
 
-      const ourAgents = [
-        {
-          name: 'Atlas',
-          role: 'Crypto Researcher',
-          imageUrl:
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-          location: 'Active',
+    const ourAgents = [
+    {
+        name: 'Atlas',
+        role: 'Crypto Researcher',
+        imageUrl:
+        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+        location: 'Active',
+    },
+    {
+        name: 'Nova',
+        role: 'X Infludener',
+        imageUrl:
+            'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
+        location: 'Coming Soon',
         },
-        {
-            name: 'Nova',
-            role: 'X Infludener',
-            imageUrl:
-              'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=8&w=1024&h=1024&q=80',
-            location: 'Coming Soon',
-          },
-        // More people...
-      ]
+    // More people...
+    ]
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -271,15 +265,15 @@ function Agents() {
                   </a>
                 </div>
                 <h1 className="mt-10 text-pretty text-5xl font-semibold tracking-tight text-white sm:text-7xl text-left">
-                  Specialized AI Agents
+                  Crypto AI Agent
                 </h1>
                 <p className="mt-8 text-pretty text-lg font-medium text-gray-400 sm:text-xl/8 text-left">
-                  Boost productivity by delegating your daily tasks to specialized AI agents. Our agents are trained with different skills, such as cypto researcher, X influencer, and more.
+                  Get real-time market analysis, the latest alpha, and actionable insights—delivered by your personal AI agent, designed to keep you informed on crypto markets.
                 </p>
                 <SignedOut>
                     <div className="mt-10 flex items-center gap-x-6">
                         <SignUpButton mode="modal">
-                        <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                        <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 pr-20 pl-20 text-md font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
                             Get started
                         </button>
                         </SignUpButton>
@@ -293,16 +287,10 @@ function Agents() {
                         {isLoading ? (
                             <div>Loading agents...</div>
                         ) : (
-                            <div className="grid gap-4 w-full max-w-md">
+                            <div className="mt-10 flex items-center gap-x-6">
                                 {agents?.map((agent) => (
-                                    <Button
-                                        key={agent.id}
-                                        className="w-full text-lg py-6"
-                                        onClick={() => {
-                                            navigate(`/${agent.id}`);
-                                        }}
-                                    >
-                                        {agent.name}
+                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-20 pl-20 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                        Chat with Agent X →
                                     </Button>
                                 ))}
                             </div>
@@ -310,7 +298,7 @@ function Agents() {
                     </div>
                 </SignedIn>
               </div>
-              <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
+              {/* <div className="mx-auto mt-16 flex max-w-2xl sm:mt-24 lg:ml-10 lg:mr-0 lg:mt-0 lg:max-w-none lg:flex-none xl:ml-32">
                 <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
                   <img
                     alt="App screenshot"
@@ -320,39 +308,16 @@ function Agents() {
                     className="w-[76rem] rounded-md bg-white/5 shadow-2xl ring-1 ring-white/10"
                   />
                 </div>
+              </div> */}
+              <div>
+
               </div>
             </div>
           </div>
         </main>
 
-
-
-        {/* Agents */}
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-pretty text-4xl font-semibold tracking-tight text-white sm:text-5xl text-left">Our Agents</h2>
-            <p className="mt-6 text-lg/8 text-gray-300 text-left">
-                Deploy AI agents capable of performing complex tasks autonomously, enhancing efficiency across various applications.
-            </p>
-            </div>
-            <ul
-            role="list"
-            className="text-left mx-auto mt-10 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 xl:grid-cols-4"
-            >
-            {ourAgents.map((theAgent) => (
-                <li key={theAgent.name}>
-                <img alt="" src={theAgent.imageUrl} className="aspect-[14/13] w-full rounded-2xl object-cover" />
-                <h3 className="mt-6 text-lg/8 font-semibold tracking-tight text-white">{theAgent.name}</h3>
-                <p className="text-base/7 text-gray-300">{theAgent.role}</p>
-                <p className="text-sm/6 text-gray-500">{theAgent.location}</p>
-                </li>
-            ))}
-            </ul>
-        </div>
-
-
         {/* Pricing */}
-        <div className="mx-auto max-w-7xl px-6 lg:px-8 mt-24">
+        <div id="pricing" className="mx-auto max-w-7xl px-6 lg:px-8 mt-24">
             <div className="mx-auto max-w-4xl text-center">
             <h2 className="text-base/7 font-semibold text-indigo-400">Pricing</h2>
             <p className="mt-5 text-balance text-5xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -385,8 +350,9 @@ function Agents() {
                 </div>
                 <p className="mt-4 text-sm/6 text-gray-300">{tier.description}</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
-                    <span className="text-4xl font-semibold tracking-tight text-white">$0.10</span>
-                    <span className="text-sm/6 font-semibold text-gray-300">/task</span>
+                    <span className="text-4xl font-semibold tracking-tight text-white">$5</span>
+                    <span className="text-sm/6 font-semibold text-gray-300">/Coin Report</span>
+                    <span className="text-sm pl-1 tracking-tight text-gray-400">(Billed Weekly)</span>
                 </p>
                 {/* <a className={classNames(
                     tier.mostPopular
@@ -400,12 +366,27 @@ function Agents() {
                 <SignedOut>
                     <div className="mt-10 flex items-center gap-x-6">
                         <SignUpButton mode="modal">
-                        <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                            Get started
-                        </button>
+                            <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                Get started
+                            </button>
                         </SignUpButton>
                 </div>
                 </SignedOut>
+                <SignedIn>
+                        <div className="mt-5">
+                            {isLoading ? (
+                                <div>Loading agents...</div>
+                            ) : (
+                                <div className="mt-10 flex items-center gap-x-6">
+                                    {agents?.map((agent) => (
+                                        <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                            Chat with Agent X →
+                                        </Button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                </SignedIn>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300 xl:mt-10">
                     {tier.features.map((feature) => (
                     <li key={feature} className="flex gap-x-3">
