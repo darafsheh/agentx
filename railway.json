@@ -1,0 +1,23 @@
+{
+    "$schema": "https://railway.com/railway.schema.json",
+    "build": {
+      "nixpacksPlan": {
+        "phases": {
+          "setup": {
+            "cmds": ["npm install -g pnpm"]
+          },
+          "install": {
+            "dependsOn": ["setup"],
+            "cmds": ["pnpm install --no-frozen-lockfile"]
+          },
+          "build":{
+            "dependsOn": ["install"],
+            "cmds": ["pnpm build"]
+          }
+        }
+      }
+    },
+    "deploy": {
+        "startCommand": "pnpm start:client"
+    }
+  }
