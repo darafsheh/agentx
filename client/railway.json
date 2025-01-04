@@ -3,7 +3,11 @@
     "build": {
       "nixpacksPlan": {
         "phases": {
+          "setup": {
+            "cmds": ["npm install -g pnpm"]
+          },
           "install": {
+            "dependsOn": ["setup"],
             "cmds": ["pnpm install --no-frozen-lockfile"]
           },
           "build":{
