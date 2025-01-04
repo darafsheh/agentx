@@ -30,7 +30,7 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: `http://localhost:${process.env.SERVER_PORT || 3000}`,
+                target: `${process.env.VITE_API_URL}`,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },

@@ -191,7 +191,7 @@ export default function Chat() {
                                                 className={`max-w-[80%] rounded-lg px-4 py-2 ${
                                                     message.user === "user"
                                                         ? "bg-blue-500 text-primary-foreground"
-                                                        : "bg-gray-700 text-gray-200 bg-muted"
+                                                        : "bg-gray-700 text-gray-200"
                                                 }`}
                                             >
                                                 {message.text}
