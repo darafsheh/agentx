@@ -4,7 +4,7 @@
       "nixpacksPlan": {
         "phases": {
           "setup": {
-            "cmds": ["npm install -g pnpm"]
+            "cmds": ["npm install -g pnpm && npm fund"]
           },
           "install": {
             "dependsOn": ["setup"],
