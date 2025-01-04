@@ -18,7 +18,6 @@
       }
     },
     "deploy": {
-        "workdir": "client",
         "startCommand": "pnpm start:client"
     }
   }
