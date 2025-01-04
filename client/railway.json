@@ -1,7 +1,7 @@
 {
     "$schema": "https://railway.com/railway.schema.json",
     "build": {
-      "workdir": "client",
+      "workDir": "client",
       "nixpacksPlan": {
         "phases": {
           "install": {
@@ -15,7 +15,7 @@
       }
     },
     "deploy": {
-        "workdir": "client",
+        "workDir": "client",
         "startCommand": "pnpm start:client"
     }
   }
