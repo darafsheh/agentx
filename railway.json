@@ -18,6 +18,7 @@
       }
     },
     "deploy": {
-        "startCommand": "cd client && pnpm start:client"
+        "workDir": "client",
+        "startCommand": "pnpm start:client"
     }
   }
