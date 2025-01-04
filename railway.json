@@ -8,7 +8,7 @@
           },
           "install": {
             "dependsOn": ["setup"],
-            "cmds": ["pnpm install --no-frozen-lockfile"]
+            "cmds": ["npm install -g pnpm && pnpm install --no-frozen-lockfile"]
           },
           "build":{
             "dependsOn": ["install"],
