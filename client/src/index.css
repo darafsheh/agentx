@@ -22,7 +22,6 @@
         --destructive-foreground: 60 9.1% 97.8%;
         --border: 20 5.9% 90%;
         --input: 20 5.9% 90%;
-        --ring: 24.6 95% 53.1%;
         --radius: 0.5rem;
         --chart-1: 12 76% 61%;
         --chart-2: 173 58% 39%;
@@ -36,7 +35,6 @@
         --sidebar-accent: 240 4.8% 95.9%;
         --sidebar-accent-foreground: 240 5.9% 10%;
         --sidebar-border: 220 13% 91%;
-        --sidebar-ring: 217.2 91.2% 59.8%;
     }
 
     .dark {

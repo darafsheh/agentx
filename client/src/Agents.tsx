@@ -373,19 +373,19 @@ function Agents() {
                 </div>
                 </SignedOut>
                 <SignedIn>
-                        <div className="mt-5">
-                            {isLoading ? (
-                                <div>Loading agents...</div>
-                            ) : (
-                                <div className="mt-10 flex items-center gap-x-6">
-                                    {agents?.map((agent) => (
-                                        <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                                            Chat with Agent X →
-                                        </Button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                    <div className="mt-5">
+                        {isLoading ? (
+                            <div>Loading agents...</div>
+                        ) : (
+                            <div className="mt-10 flex items-center gap-x-6">
+                                {agents?.map((agent) => (
+                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                        Chat with Agent X →
+                                    </Button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </SignedIn>
                 <ul role="list" className="mt-8 space-y-3 text-sm/6 text-gray-300 xl:mt-10">
                     {tier.features.map((feature) => (

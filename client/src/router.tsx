@@ -17,7 +17,8 @@ export const router = createBrowserRouter([
         children: [
             {
                 path: "", // This matches /:agentId exactly
-                element: <Agent />,
+                element: <Chat />,
+                // element: <Agent />,
             },
             {
                 path: "chat", // This matches /:agentId/chat
