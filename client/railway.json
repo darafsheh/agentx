@@ -4,16 +4,16 @@
       "nixpacksPlan": {
         "phases": {
           "install": {
-            "cmds": ["cd /app/client", "npm install -g corepack", "corepack enable", "corepack prepare pnpm@9.1.0 --activate", "pnpm install --no-frozen-lockfile"]
+            "cmds": ["cd /client", "npm install -g corepack", "corepack enable", "corepack prepare pnpm@9.1.0 --activate", "pnpm install --no-frozen-lockfile"]
           },
           "build":{
             "dependsOn": ["install"],
-            "cmds": ["cd /app/client", "pnpm build"]
+            "cmds": ["cd /client", "pnpm build"]
           }
         }
       }
     },
     "deploy": {
-        "startCommand": "cd /app/client && pnpm start:client"
+        "startCommand": "cd /client && pnpm start:client"
     }
   }
