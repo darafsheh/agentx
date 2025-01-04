@@ -8,7 +8,7 @@
           },
           "build":{
             "dependsOn": ["install"],
-            "cmds": ["cd /client", "pnpm build"]
+            "cmds": ["pnpm build"]
           }
         }
       }
