@@ -30,10 +30,19 @@ export default defineConfig({
     server: {
         proxy: {
             "/api": {
-                target: `http://localhost:${process.env.SERVER_PORT || 3000}`,
+                target: `http://44.243.47.20:${process.env.SERVER_PORT || 3000}`,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, ""),
             },
         },
+        host: true, // This allows access from any IP
+    port: 5173,
+    strictPort: true,
+    watch: {
+      usePolling: true
+    },
+    hmr: {
+      clientPort: 80
+    },
     },
 });
