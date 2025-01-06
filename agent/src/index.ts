@@ -374,10 +374,17 @@ function initializeDatabase(dataDir: string) {
 
         return db;
     } else {
-        const filePath =
-            process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
-        // ":memory:";
-        const db = new SqliteDatabaseAdapter(new Database(filePath));
+        // const filePath =
+        //     process.env.SQLITE_FILE ?? path.resolve(dataDir, "db.sqlite");
+        // // ":memory:";
+        // const db = new SqliteDatabaseAdapter(new Database(filePath));
+        const db = new PostgresDatabaseAdapter({
+            connectionString: process.env.DATABASE_URL,
+            max: 20, // Connection pool size
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000,
+        });
+
         return db;
     }
 }
