@@ -55,3 +55,10 @@ COPY --from=builder /app/characters ./characters
 #CMD ["pnpm", "start"]
 #CMD ["node", "--max-old-space-size=4096", "pnpm", "start"]
 CMD ["pnpm", "run", "start"]
+#Always run:
+    # docker stop agentx-server
+    # docker rm agentx-server
+    # docker build -t eliza .
+    # docker run -d --name agentx-server   -p 3000:3000   -e .env   eliza   pnpm start --characters="agentx.character.json" //Start server
+    # docker run -d --name agentx-server   -p 3000:3000   --env-file .env   eliza   pnpm start --characters="agentx.character.json" //Start server
+    #docker run -d --name agentx-server   -p 3000:3000 -e ANTHROPIC_API_KEY="$(grep ANTHROPIC_API_KEY .env | cut -d '=' -f2)"   eliza   pnpm start --characters="agentx.character.json"

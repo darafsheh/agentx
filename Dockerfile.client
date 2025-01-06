@@ -62,3 +62,11 @@ EXPOSE 5173
 #CMD ["node", "--max-old-space-size=4096", "pnpm", "start"]
 #CMD ["pnpm", "run", "start:client"]
 CMD ["pnpm", "--dir", "client", "dev", "--host"]
+
+
+#Instructions based on testing
+#Always run:
+    # docker stop agentx-client
+    # docker rm agentx-client
+    # docker build -t agentx-client -f Dockerfile.client .
+    # docker run -d --name agentx-client   -p 80:5173   -e SERVER_PORT=3000 --env-file .env   agentx-client
