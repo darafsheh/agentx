@@ -56,18 +56,11 @@ COPY --from=builder /app/characters ./characters
 COPY --from=builder /app ./
 
 # Create directory for SSL certificates
-RUN mkdir -p /etc/letsencrypt
+# RUN mkdir -p /etc/letsencrypt
+RUN mkdir -p /etc/letsencrypt/live/jent.ai && \
+    chmod 755 /etc/letsencrypt/live/jent.ai
 
-# Create SSL directories with proper permissions
-RUN mkdir -p /etc/ssl/certs && \
-    mkdir -p /etc/ssl/private && \
-    chmod 755 /etc/ssl/certs && \
-    chmod 750 /etc/ssl/private
-
-
-RUN ls -la /etc/letsencrypt/live/jent.ai/ || echo "Certificates not found"
-
-
+RUN ls -la /etc/letsencrypt/live/jent.ai || echo "Certificates Directory not found"
 
 EXPOSE 5173
 EXPOSE 443
