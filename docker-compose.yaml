@@ -9,8 +9,7 @@ services:
             - /var/run/tappd.sock:/var/run/tappd.sock
             - tee:/app/packages/client-twitter/src/tweetcache
             - tee:/app/db.sqlite
-            - /etc/letsencrypt/live:/etc/letsencrypt/live:ro
-            - /etc/letsencrypt/archive:/etc/letsencrypt/archive:ro
+            - /etc/letsencrypt:/etc/letsencrypt:ro
         environment:
             - VITE_SERVER_URL=https://jent.ai
             - OPENAI_API_KEY=
@@ -49,8 +48,7 @@ services:
             dockerfile: Dockerfile.client
         user: "node:node"
         volumes:
-            - /etc/letsencrypt/live:/etc/letsencrypt/live:ro
-            - /etc/letsencrypt/archive:/etc/letsencrypt/archive:ro
+            - /etc/letsencrypt:/etc/letsencrypt:ro
         environment:
             - SSL_CERT_PATH=/etc/letsencrypt/live/jent.ai/fullchain.pem
             - SSL_KEY_PATH=/etc/letsencrypt/live/jent.ai/privkey.pem
