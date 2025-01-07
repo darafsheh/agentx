@@ -64,6 +64,10 @@ RUN mkdir -p /etc/ssl/certs && \
     chmod 755 /etc/ssl/certs && \
     chmod 750 /etc/ssl/private
 
+# Copy the SSL certificate and key into the container
+COPY /etc/letsencrypt/live/jent.ai/fullchain.pem /etc/ssl/certs/fullchain.pem
+COPY /etc/letsencrypt/live/jent.ai/privkey.pem /etc/ssl/certs/privkey.pem
+
 RUN ls -la /etc/letsencrypt/live/jent.ai/ || echo "Certificates not found"
 
 
