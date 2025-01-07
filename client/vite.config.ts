@@ -6,6 +6,7 @@ import wasm from "vite-plugin-wasm";
 import { config } from "dotenv";
 import type { Connect } from 'vite';
 import type { IncomingMessage, ServerResponse } from 'http';
+import fs from 'fs';
 
 config({ path: resolve(__dirname, "../.env") });
 
@@ -61,11 +62,11 @@ export default defineConfig({
             },
         },
         host: true, // This allows access from any IP
-        port: 443,
-        https: {
-            key: '/etc/letsencrypt/live/jent.ai/privkey.pem',
-            cert: '/etc/letsencrypt/live/jent.ai/fullchain.pem',
-        },
+        port: 5173,
+        https: process.env.SSL_CERT_PATH && process.env.SSL_KEY_PATH ? {
+            key: fs.readFileSync(process.env.SSL_KEY_PATH),
+            cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+        } : undefined,
         strictPort: true,
         watch: {
         usePolling: true
