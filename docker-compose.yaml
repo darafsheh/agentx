@@ -47,6 +47,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile.client
+        user: "node:node"
         volumes:
             - /etc/letsencrypt/live:/etc/letsencrypt/live:ro
             - /etc/letsencrypt/archive:/etc/letsencrypt/archive:ro
