@@ -9,7 +9,9 @@ services:
             - /var/run/tappd.sock:/var/run/tappd.sock
             - tee:/app/packages/client-twitter/src/tweetcache
             - tee:/app/db.sqlite
+            - /etc/letsencrypt:/etc/letsencrypt:ro
         environment:
+            - VITE_SERVER_URL=https://jent.ai
             - OPENAI_API_KEY=
             - REDPILL_API_KEY=
             - ELEVENLABS_XI_API_KEY=
@@ -34,6 +36,7 @@ services:
             - SERVER_PORT=3000
             - WALLET_SECRET_SALT=secret_salt
         ports:
+            - "3000:443"
             - "3000:80"
         restart: always
 
