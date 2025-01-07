@@ -48,7 +48,10 @@ services:
             dockerfile: Dockerfile.client
         user: "node:node"
         volumes:
-            - /etc/letsencrypt:/etc/letsencrypt:ro
+            - type: bind
+              source: /etc/letsencrypt
+              target: /etc/letsencrypt
+              read_only: true
         environment:
             - SSL_CERT_PATH=/etc/letsencrypt/live/jent.ai/fullchain.pem
             - SSL_KEY_PATH=/etc/letsencrypt/live/jent.ai/privkey.pem
