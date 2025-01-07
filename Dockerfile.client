@@ -55,13 +55,17 @@ COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
 COPY --from=builder /app ./
 
-EXPOSE 5173
+# Create directory for SSL certificates
+RUN mkdir -p /etc/letsencrypt
+
+EXPOSE 443
+EXPOSE 80
 
 # Set the command to run the application
 #CMD ["pnpm", "start"]
 #CMD ["node", "--max-old-space-size=4096", "pnpm", "start"]
 #CMD ["pnpm", "run", "start:client"]
-CMD ["pnpm", "--dir", "client", "dev", "--host"]
+CMD ["pnpm", "--dir", "client", "dev", "--host", "--port", "443"]
 
 
 #Instructions based on testing
