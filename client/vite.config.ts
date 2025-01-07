@@ -63,10 +63,21 @@ export default defineConfig({
         },
         host: true, // This allows access from any IP
         port: 5173,
-        https: process.env.SSL_CERT_PATH && process.env.SSL_KEY_PATH ? {
-            key: fs.readFileSync(process.env.SSL_KEY_PATH),
-            cert: fs.readFileSync(process.env.SSL_CERT_PATH),
-        } : undefined,
+        // https: process.env.SSL_CERT_PATH && process.env.SSL_KEY_PATH ? {
+        //     key: fs.readFileSync(process.env.SSL_KEY_PATH),
+        //     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+        // } : undefined,
+        https: (() => {
+            try {
+                return process.env.SSL_CERT_PATH && process.env.SSL_KEY_PATH ? {
+                    key: fs.readFileSync(process.env.SSL_KEY_PATH),
+                    cert: fs.readFileSync(process.env.SSL_CERT_PATH),
+                } : undefined;
+            } catch (e) {
+                console.warn('SSL certificates not found, falling back to HTTP');
+                return undefined;
+            }
+        })(),
         strictPort: true,
         watch: {
         usePolling: true

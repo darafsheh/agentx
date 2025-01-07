@@ -57,8 +57,10 @@ COPY --from=builder /app ./
 
 # Create directory for SSL certificates
 # RUN mkdir -p /etc/letsencrypt
-RUN mkdir -p /etc/letsencrypt/live/jent.ai && \
-    chmod 755 /etc/letsencrypt/live/jent.ai
+RUN mkdir -p /etc/letsencrypt/live/jent.ai
+RUN chmod 755 /etc/letsencrypt/live/jent.ai
+RUN chown -R node:node /etc/letsencrypt
+
 
 RUN ls -la /etc/letsencrypt/live/jent.ai || echo "Certificates Directory not found"
 
