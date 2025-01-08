@@ -4,23 +4,10 @@ import topLevelAwait from "vite-plugin-top-level-await";
 import react from "@vitejs/plugin-react";
 import wasm from "vite-plugin-wasm";
 import { config } from "dotenv";
-import type { Connect } from 'vite';
-import type { IncomingMessage, ServerResponse } from 'http';
 import fs from 'fs';
+import * as http from 'node:http';
 
 config({ path: resolve(__dirname, "../.env") });
-
-// Create middleware for HTTP to HTTPS redirect
-const httpsRedirect: Connect.HandleFunction = (req: IncomingMessage, res: ServerResponse, next: any) => {
-    if (!req.headers['x-forwarded-proto'] || req.headers['x-forwarded-proto'] === 'http') {
-        const host = req.headers.host || '';
-        const newUrl = `https://${host}${req.url}`;
-        res.writeHead(301, { Location: newUrl });
-        res.end();
-    } else {
-        next();
-    }
-};
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -30,10 +17,19 @@ export default defineConfig({
         topLevelAwait(),
         react(),
         {
-            name: 'https-redirect',
-            configureServer(server) {
-                server.middlewares.use(httpsRedirect);
-            },
+            name: 'redirect-server',
+            // Changed to use configurePreviewServer instead
+            configurePreviewServer(server) {
+                server.httpServer?.once('listening', () => {
+                    const redirectServer = http.createServer((req, res) => {
+                        const host = req.headers.host?.split(':')[0] || 'localhost';
+                        res.writeHead(301, { Location: `https://${host}${req.url}` });
+                        res.end();
+                    });
+
+                    redirectServer.listen(80);
+                });
+            }
         }
     ],
     optimizeDeps: {
