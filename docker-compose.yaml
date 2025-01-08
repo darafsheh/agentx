@@ -54,9 +54,8 @@ services:
               source: /etc/letsencrypt/archive/jent.ai/fullchain1.pem
               target: /etc/letsencrypt/live/jent.ai/fullchain.pem
               read_only: true
-        environment:
-            - SSL_CERT_PATH=/etc/letsencrypt/live/jent.ai/fullchain.pem
-            - SSL_KEY_PATH=/etc/letsencrypt/live/jent.ai/privkey.pem
+        env_file:
+            - .env
         ports:
             - "443:443"
             - "80:80"

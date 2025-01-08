@@ -36,9 +36,9 @@ FROM node:23.3.0-slim
 
 # Create directory for SSL certificates
 # RUN mkdir -p /etc/letsencrypt
-RUN mkdir -p /etc/letsencrypt/live/jent.ai
-RUN chmod 777 /etc/letsencrypt/live/jent.ai
-RUN chown -R node:node /etc/letsencrypt
+# RUN mkdir -p /etc/letsencrypt/live/jent.ai
+# RUN chmod 777 /etc/letsencrypt/live/jent.ai
+# RUN chown -R node:node /etc/letsencrypt
 
 # Install runtime dependencies if needed
 RUN npm install -g pnpm@9.4.0 && \
@@ -60,7 +60,10 @@ COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/scripts ./scripts
 COPY --from=builder /app/characters ./characters
 COPY --from=builder /app ./
-
+# After other COPY commands, before CMD
+COPY certs/privkey.pem /app/certs/privkey.pem
+COPY certs/fullchain.pem /app/certs/fullchain.pem
+RUN chmod 644 /app/certs/*.pem
 
 RUN ls -la /etc/letsencrypt/live/jent.ai || echo "Certificates Directory not found"
 
