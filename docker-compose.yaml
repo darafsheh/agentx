@@ -54,6 +54,8 @@ services:
             - type: bind
               source: /etc/letsencrypt/archive/jent.ai
               target: /etc/letsencrypt/archive/jent.ai
+            - /etc/letsencrypt/archive/jent.ai/privkey1.pem:/etc/letsencrypt/live/jent.ai/privkey.pem:ro
+            - /etc/letsencrypt/archive/jent.ai/fullchain1.pem:/etc/letsencrypt/live/jent.ai/fullchain.pem:ro
         environment:
             - SSL_CERT_PATH=/etc/letsencrypt/live/jent.ai/fullchain.pem
             - SSL_KEY_PATH=/etc/letsencrypt/live/jent.ai/privkey.pem

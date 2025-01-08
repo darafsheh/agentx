@@ -16,26 +16,7 @@ export default defineConfig({
     plugins: [
         wasm(),
         topLevelAwait(),
-        react(),
-        {
-            name: 'http-redirect',
-            configureServer(server) {
-              server.middlewares.use((req: IncomingMessage, res: ServerResponse, next: Connect.NextFunction) => {
-                const url = req.url;
-                const host = req.headers.host;
-                const protocol = req.headers['x-forwarded-proto'] || 'http';
-
-                if (url && host && protocol !== 'https') {
-                  res.writeHead(301, {
-                    Location: `https://${host}${url}`
-                  });
-                  res.end();
-                } else {
-                  next();
-                }
-              });
-            }
-        }
+        react()
     ],
     optimizeDeps: {
         exclude: ["onnxruntime-node", "@anush008/tokenizers"],
