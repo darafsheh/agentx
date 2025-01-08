@@ -10,13 +10,31 @@ import fs from 'fs';
 
 config({ path: resolve(__dirname, "../.env") });
 
+// Create middleware for HTTP to HTTPS redirect
+const httpsRedirect: Connect.HandleFunction = (req: IncomingMessage, res: ServerResponse, next: any) => {
+    if (!req.headers['x-forwarded-proto'] || req.headers['x-forwarded-proto'] === 'http') {
+        const host = req.headers.host || '';
+        const newUrl = `https://${host}${req.url}`;
+        res.writeHead(301, { Location: newUrl });
+        res.end();
+    } else {
+        next();
+    }
+};
+
 // https://vite.dev/config/
 export default defineConfig({
     envDir: resolve(__dirname, '../'),
     plugins: [
         wasm(),
         topLevelAwait(),
-        react()
+        react(),
+        {
+            name: 'https-redirect',
+            configureServer(server) {
+                server.middlewares.use(httpsRedirect);
+            },
+        }
     ],
     optimizeDeps: {
         exclude: ["onnxruntime-node", "@anush008/tokenizers"],
@@ -66,6 +84,6 @@ export default defineConfig({
         },
         hmr: {
         clientPort: 443
-        },
+        }
     },
 });
