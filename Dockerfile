@@ -58,7 +58,7 @@ CMD ["pnpm", "run", "start"]
 #Always run:
     # docker stop agentx-server
     # docker rm agentx-server
-    # docker build -t eliza .
-    # docker run -d --name agentx-server   -p 3000:3000   --env-file .env   eliza   pnpm start --characters="agentx.character.json" //Start server
+    # docker build -t agentx-server .
+    # docker run -d --name agentx-server   -p 3000:3000   --env-file .env   agentx-server   pnpm start --characters="agentx.character.json" //Start server
     #docker run -d --name agentx-server   -p 3000:3000 -e ANTHROPIC_API_KEY="$(grep ANTHROPIC_API_KEY .env | cut -d '=' -f2)"   eliza   pnpm start --characters="agentx.character.json"
     # docker run -d --name agentx-server   -p 3000:3000 -e OPENAI_API_KEY=''   --env-file .env   eliza   pnpm start --characters="c3po.character.json"

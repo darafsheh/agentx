@@ -117,12 +117,14 @@ function Agents() {
             <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
             <div className="flex md:flex-1">
                 <a href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Agent X</span>
-                <img
+                <span className="sr-only">Jent</span>
+                <span className="relative inline-block">
+                    <img
                     alt=""
-                    src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                    className="h-8 w-auto"
-                />
+                    src="https://jent.s3.us-west-2.amazonaws.com/jent-square.jpg"
+                    className="size-16 rounded-md"
+                    />
+                </span>
                 </a>
             </div>
             <div className="flex md:hidden">
@@ -163,7 +165,7 @@ function Agents() {
             <DialogPanel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                 <div className="flex items-center justify-between">
                 <a href="#" className="-m-1.5 p-1.5">
-                    <span className="sr-only">Agent X</span>
+                    <span className="sr-only">Jent</span>
                     <img
                     alt=""
                     src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
@@ -289,8 +291,8 @@ function Agents() {
                         ) : (
                             <div className="mt-10 flex items-center gap-x-6">
                                 {agents?.map((agent) => (
-                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-20 pl-20 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                                        Chat with Agent X →
+                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-20 pl-20 text-md font-semibold text-gray-900 shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                        Chat with Jent →
                                     </Button>
                                 ))}
                             </div>
@@ -379,8 +381,8 @@ function Agents() {
                         ) : (
                             <div className="mt-10 flex items-center gap-x-6">
                                 {agents?.map((agent) => (
-                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-white shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                                        Chat with Agent X →
+                                    <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-gray-900 shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
+                                        Chat with Jent →
                                     </Button>
                                 ))}
                             </div>
@@ -412,7 +414,7 @@ function Agents() {
               ))}
             </div>
             <p className="mt-8 text-center text-sm/6 text-gray-400 md:order-1 md:mt-0">
-              &copy; 2024 Agent X, Inc. All rights reserved.
+              &copy; 2024 Jent, Inc. All rights reserved.
             </p>
           </div>
         </footer>

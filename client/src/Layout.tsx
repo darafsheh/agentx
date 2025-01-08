@@ -51,11 +51,13 @@ export default function Layout() {
                     {/* Sidebar component, swap this element with another sidebar if you like */}
                     <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
                         <div className="flex h-16 shrink-0 items-center">
-                        <img
-                            alt="Your Company"
-                            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                            className="h-8 w-auto"
-                        />
+                        <span className="relative inline-block">
+                            <img
+                            alt=""
+                            src="https://jent.s3.us-west-2.amazonaws.com/jent-square.jpg"
+                            className="size-16 rounded-md"
+                            />
+                        </span>
                         </div>
                         <AppSidebar />
                     </div>
@@ -68,11 +70,13 @@ export default function Layout() {
                 {/* Sidebar component, swap this element with another sidebar if you like */}
                 <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-black/10 px-6 ring-1 ring-white/5">
                     <div className="flex h-16 shrink-0 items-center">
-                    <img
-                        alt="Your Company"
-                        src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                        className="h-8 w-auto"
-                    />
+                    <span className="relative inline-block">
+                        <img
+                        alt=""
+                        src="https://jent.s3.us-west-2.amazonaws.com/jent-square.jpg"
+                        className="size-10 rounded-md"
+                        />
+                    </span>
                     </div>
                     <AppSidebar />
                 </div>
