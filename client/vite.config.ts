@@ -27,7 +27,18 @@ export default defineConfig({
                         res.end();
                     });
 
-                    redirectServer.listen(80);
+                    console.log("I am listening to port 80");
+
+                    // Add error handling and bind to all interfaces
+                    redirectServer.on('error', (err) => {
+                        console.error('Redirect server error:', err);
+                    });
+
+                    redirectServer.listen(80, '0.0.0.0', () => {
+                        console.log('Redirect server running on port 80');
+                    });
+
+                    //redirectServer.listen(80);
                 });
             }
         }
