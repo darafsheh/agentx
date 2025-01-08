@@ -73,7 +73,8 @@ export default defineConfig({
                     key: fs.readFileSync(process.env.SSL_KEY_PATH),
                     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
                 } : undefined;
-            } catch (e) {
+            } catch (e: any) {
+                console.warn('SSL certificates error:', e.message);
                 console.warn('SSL certificates not found, falling back to HTTP');
                 return undefined;
             }
