@@ -26,12 +26,6 @@ COPY packages ./packages
 COPY scripts ./scripts
 COPY characters ./characters
 
-# Create directory for SSL certificates
-# RUN mkdir -p /etc/letsencrypt
-RUN mkdir -p /etc/letsencrypt/live/jent.ai
-RUN chmod 777 /etc/letsencrypt/live/jent.ai
-RUN chown -R node:node /etc/letsencrypt
-
 # Install dependencies and build the project
 RUN pnpm install \
     && pnpm build-docker \
@@ -39,6 +33,12 @@ RUN pnpm install \
 
 # Create a new stage for the final image
 FROM node:23.3.0-slim
+
+# Create directory for SSL certificates
+# RUN mkdir -p /etc/letsencrypt
+RUN mkdir -p /etc/letsencrypt/live/jent.ai
+RUN chmod 777 /etc/letsencrypt/live/jent.ai
+RUN chown -R node:node /etc/letsencrypt
 
 # Install runtime dependencies if needed
 RUN npm install -g pnpm@9.4.0 && \
