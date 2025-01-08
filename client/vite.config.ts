@@ -43,7 +43,7 @@ export default defineConfig({
             },
         },
         host: true, // This allows access from any IP
-        port: 5173,
+        port: 443,
         // https: process.env.SSL_CERT_PATH && process.env.SSL_KEY_PATH ? {
         //     key: fs.readFileSync(process.env.SSL_KEY_PATH),
         //     cert: fs.readFileSync(process.env.SSL_CERT_PATH),
