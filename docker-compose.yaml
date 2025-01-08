@@ -47,13 +47,13 @@ services:
         user: "node:node"
         volumes:
             - type: bind
-              source: /etc/letsencrypt/live/jent.ai
-              target: /etc/letsencrypt/live/jent.ai
+              source: /etc/letsencrypt/archive/jent.ai/privkey1.pem
+              target: /etc/letsencrypt/live/jent.ai/privkey.pem
+              read_only: true
             - type: bind
-              source: /etc/letsencrypt/archive/jent.ai
-              target: /etc/letsencrypt/archive/jent.ai
-            - /etc/letsencrypt/archive/jent.ai/privkey1.pem:/etc/letsencrypt/live/jent.ai/privkey.pem:ro
-            - /etc/letsencrypt/archive/jent.ai/fullchain1.pem:/etc/letsencrypt/live/jent.ai/fullchain.pem:ro
+              source: /etc/letsencrypt/archive/jent.ai/fullchain1.pem
+              target: /etc/letsencrypt/live/jent.ai/fullchain.pem
+              read_only: true
         environment:
             - SSL_CERT_PATH=/etc/letsencrypt/live/jent.ai/fullchain.pem
             - SSL_KEY_PATH=/etc/letsencrypt/live/jent.ai/privkey.pem
