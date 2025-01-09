@@ -6,22 +6,11 @@ import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
   TransitionChild,
 } from '@headlessui/react'
 import {
-  ChartBarSquareIcon,
-  Cog6ToothIcon,
-  FolderIcon,
-  GlobeAltIcon,
-  ServerIcon,
-  SignalIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { Bars3Icon, ChevronRightIcon, ChevronUpDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 export default function Layout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
