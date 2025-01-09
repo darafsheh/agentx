@@ -397,6 +397,9 @@ function Agents() {
                     </li>
                     ))}
                 </ul>
+                <p className="mt-4 text-gray-300 text-left">
+                    Don't take anything Jent says seriously, it is NOT financial advice!
+                </p>
                 </div>
             ))}
             </div>
