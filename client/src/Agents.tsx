@@ -18,6 +18,7 @@ import {
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { BoltIcon, CalendarDaysIcon, UsersIcon } from '@heroicons/react/24/outline'
 import "./App.css";
+import Chat from './Chat.tsx';
 
 type Agent = {
     id: string;
@@ -81,11 +82,9 @@ function Agents() {
         price: { monthly: '$29', annually: '$299' },
         description: '',
         features: [
-        '+10,000 reports on crypto projects',
-        'Daily alpha on porject updates',
-        'Access to private alpha channel',
-        'Alpha requests for new coins',
-        'Automated report updates',
+        'Minimum 7 trade insights per week (one per day)',
+        'Analyses +100 crypto projects weekly',
+        'Daily alpha on trending porjects'
         ],
         mostPopular: false,
     }
@@ -155,7 +154,6 @@ function Agents() {
                         <div className="text-sm/6 font-semibold text-white mr-3">
                             <UserButton />
                         </div>
-                        <a href="/chat" className="text-sm/6 font-semibold text-white">Dashboard →</a>
                     </div>
                 </SignedIn>
             </div>
@@ -205,7 +203,6 @@ function Agents() {
                             <div className="text-sm/6 font-semibold text-gray-900">
                                 <UserButton />
                             </div>
-                            <a href="/chat" className="text-sm/6 font-semibold text-gray-900">Dashboard →</a>
                         </div>
                     </SignedIn>
                     </div>
@@ -261,22 +258,22 @@ function Agents() {
                       What's new
                     </span>
                     <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-gray-300">
-                      <span>Just shipped v1.0</span>
-                      <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-500" />
+                      <span>01/06/25: Jent is live</span>
+                      {/* <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-500" /> */}
                     </span>
                   </a>
                 </div>
                 <h1 className="mt-10 text-pretty text-5xl font-semibold tracking-tight text-white sm:text-7xl text-left">
-                  Crypto AI Agent
+                  Jent, crypto AI agent
                 </h1>
                 <p className="mt-8 text-pretty text-lg font-medium text-gray-400 sm:text-xl/8 text-left">
-                  Get real-time market analysis, the latest alpha, and actionable insights—delivered by your personal AI agent, designed to keep you informed on crypto markets.
+                  Get real-time market analysis, the latest alpha, and actionable insights delivered by the pepe jedi agent, Jent, designed to keep you informed on crypto markets.
                 </p>
                 <SignedOut>
                     <div className="mt-10 flex items-center gap-x-6">
                         <SignUpButton mode="modal">
                         <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 pr-20 pl-20 text-md font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                            Get started
+                            Signup to chat
                         </button>
                         </SignUpButton>
                     {/* <a href="#" className="text-sm/6 font-semibold text-white">
@@ -353,8 +350,11 @@ function Agents() {
                 <p className="mt-4 text-sm/6 text-gray-300">{tier.description}</p>
                 <p className="mt-6 flex items-baseline gap-x-1">
                     <span className="text-4xl font-semibold tracking-tight text-white">$5</span>
-                    <span className="text-sm/6 font-semibold text-gray-300">/Coin Report</span>
+                    <span className="text-sm/6 font-semibold text-gray-300">/trade insight</span>
                     <span className="text-sm pl-1 tracking-tight text-gray-400">(Billed Weekly)</span>
+                </p>
+                <p className="mt-4 text-gray-300 text-left">
+                    Each trade insight will include all the details you need to execute on a trade. Jent will soon be able connect to your wallet and execute trades for you.
                 </p>
                 {/* <a className={classNames(
                     tier.mostPopular
@@ -366,20 +366,20 @@ function Agents() {
                     Get started
                 </a> */}
                 <SignedOut>
-                    <div className="mt-10 flex items-center gap-x-6">
+                    <div className="mt-6 flex items-center gap-x-6">
                         <SignUpButton mode="modal">
                             <button className="rounded-md bg-indigo-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
-                                Get started
+                                Signup to chat
                             </button>
                         </SignUpButton>
                 </div>
                 </SignedOut>
                 <SignedIn>
-                    <div className="mt-5">
+                    <div className="mt-6">
                         {isLoading ? (
                             <div>Loading agents...</div>
                         ) : (
-                            <div className="mt-10 flex items-center gap-x-6">
+                            <div className="mt-6 flex items-center gap-x-6">
                                 {agents?.map((agent) => (
                                     <Button  key={agent.id} onClick={() => { navigate(`/${agent.id}`);}} className="rounded-md bg-green-400 px-3.5 py-2.5 pr-10 pl-10 text-md font-semibold text-gray-900 shadow-sm hover:bg-green-500	 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400">
                                         Chat with Jent →

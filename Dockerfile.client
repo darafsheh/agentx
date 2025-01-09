@@ -83,5 +83,5 @@ CMD ["pnpm", "--dir", "client", "dev", "--host", "--port", "443"]
     # docker stop agentx-client
     # docker rm agentx-client
     # docker build -t agentx-client -f Dockerfile.client .
-    # docker run -d --name agentx-client   -p 80:5173   -e SERVER_PORT=3000 --env-file .env   agentx-client
+    # docker run -d --name agentx-client   -p 443:443 -p 80:80   -e SERVER_PORT=3000 --env-file .env   agentx-client
     #docker run -d --name agentx-client   -p 443:5173   -e SERVER_PORT=3000 --env-file .env -v /etc/letsencrypt:/etc/letsencrypt:ro   agentx-client ls -la /etc/letsencrypt/live/jent.ai
