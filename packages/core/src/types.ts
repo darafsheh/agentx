@@ -521,6 +521,9 @@ export interface Account {
     /** Optional email */
     email?: string;
 
+    /** Stripe customer id */
+    customer_id?: string;
+
     /** Optional avatar URL */
     avatarUrl?: string;
 }

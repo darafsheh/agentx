@@ -7,7 +7,9 @@ import {
     generateCaption,
     generateImage,
     Media,
-    getEmbeddingZeroVector
+    getEmbeddingZeroVector,
+    getEnvVariable,
+    recordStripeEvent
 } from "@elizaos/core";
 import { composeContext } from "@elizaos/core";
 import { generateMessageResponse } from "@elizaos/core";
@@ -116,7 +118,7 @@ export class DirectClient {
             "/:agentId/init-session",
             async (req: express.Request, res: express.Response) => {
                 const agentId = req.params.agentId;
-                const { userId, name, email } = req.body;
+                const { userId, name, email, customer_id } = req.body;
                 console.log("User ID: " + userId);
 
                 let runtime = this.agents.get(agentId);
@@ -145,6 +147,7 @@ export class DirectClient {
                         email,         // username from Clerk
                         name,         // display name from Clerk
                         email,        // email from Clerk
+                        customer_id,
                         'clerk'       // source
                     );
 
@@ -235,6 +238,9 @@ export class DirectClient {
                 const userId = stringToUuid(req.body.userId ?? "user");
 
                 let runtime = this.agents.get(agentId);
+
+                // record chat meter event
+                await runtime.recordEvent(userId, process.env.CHAT_METER_EVENT_NAME, "1");
 
                 // if runtime is null, look for runtime with the same name
                 if (!runtime) {
@@ -665,6 +671,39 @@ export class DirectClient {
                 });
             }
         });
+
+        this.app.post(
+            "/:agentId/get-billing",
+            async (req: express.Request, res: express.Response) => {
+                const agentId = req.params.agentId;
+                const userId = stringToUuid(req.body.userId ?? "user");
+                const url = req.body.url ?? "https://jent.ai";
+
+                let runtime = this.agents.get(agentId);
+
+                // if runtime is null, look for runtime with the same name
+                if (!runtime) {
+                    runtime = Array.from(this.agents.values()).find(
+                        (a) => a.character.name.toLowerCase() === agentId.toLowerCase()
+                    );
+                }
+
+                if (!runtime) {
+                    res.status(404).send("Agent not found");
+                    return;
+                }
+
+                try {
+                    const billingData = await runtime.getBilling(userId, url);
+                    res.json(billingData);
+                } catch (error) {
+                    res.status(500).json({
+                        error: "Failed to get billing data",
+                        details: error.message
+                    });
+                }
+            }
+        );
     }
 
     // agent/src/index.ts:startAgent calls this

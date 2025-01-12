@@ -15,7 +15,7 @@ import {
 } from "./evaluators.ts";
 import { generateText } from "./generation.ts";
 import { formatGoalsAsString, getGoals } from "./goals.ts";
-import { elizaLogger } from "./index.ts";
+import { getEnvVariable, elizaLogger } from "./index.ts";
 import knowledge from "./knowledge.ts";
 import { MemoryManager } from "./memory.ts";
 import { formatActors, formatMessages, getActorDetails } from "./messages.ts";
@@ -46,12 +46,18 @@ import {
     type Memory,
 } from "./types.ts";
 import { stringToUuid } from "./uuid.ts";
+import { createStripeCustomer, recordStripeEvent, getCheckoutSession, getPortalSession } from './stripe';
+import { custom } from "zod";
 
 /**
  * Represents the runtime environment for an agent, handling message processing,
  * action registration, and interaction with external services like OpenAI and Supabase.
  */
 export class AgentRuntime implements IAgentRuntime {
+
+    // Add a map to track ongoing user creation
+    private userCreationInProgress: Map<UUID, Promise<void>> = new Map();
+
     /**
      * Default count for recent messages to be kept in memory.
      * @private
@@ -687,18 +693,110 @@ export class AgentRuntime implements IAgentRuntime {
         userName: string | null,
         name: string | null,
         email?: string | null,
+        customer_id?: string | null,
         source?: string | null
     ) {
-        const account = await this.databaseAdapter.getAccountById(userId);
-        if (!account) {
-            await this.databaseAdapter.createAccount({
-                id: userId,
-                name: name || userName || "Unknown User",
-                username: userName || name || "Unknown",
-                email: email || (userName || "Bot") + "@" + source || "Unknown", // Temporary
-                details: { summary: "" },
-            });
-            elizaLogger.success(`User ${userName} created successfully.`);
+        // Check if there's already a creation in progress for this user
+        const existingCreation = this.userCreationInProgress.get(userId);
+        if (existingCreation) {
+            elizaLogger.info(`User creation already in progress for ${userId}, waiting...`);
+            return existingCreation;
+        }
+
+        // Create a new promise for this user creation
+        const creationPromise = (async () => {
+            try {
+                const account = await this.databaseAdapter.getAccountById(userId);
+                if (!account) {
+                    let stripeCustomerId, rateCardSubscriptionId = '';
+                    if (email) {
+                        const rateCardId = getEnvVariable('RATE_CARD_ID');
+
+                        try {
+                            const stripeResult = await createStripeCustomer({
+                                email,
+                                name: name || userName || undefined,
+                                userId,
+                                source,
+                                rateCardId: rateCardId
+                            });
+                            stripeCustomerId = stripeResult.customerId;
+                            rateCardSubscriptionId = stripeResult.rateCardSubscriptionId;
+                        } catch (error) {
+                            elizaLogger.error('Failed to create Stripe customer:', error);
+                        }
+                    }
+
+                    try {
+                        await this.databaseAdapter.createAccount({
+                            id: userId,
+                            name: name || userName || "Unknown User",
+                            username: userName || name || "Unknown",
+                            email: email || (userName || "Bot") + "@" + source || "Unknown",
+                            customer_id: stripeCustomerId || customer_id || "",
+                            details: { summary: "" },
+                        });
+                        elizaLogger.success(`Account created successfully for ${userId}`);
+                    } catch (error) {
+                        // Check if the error is due to the account already existing
+                        if (error.message?.includes('duplicate key') || error.error?.includes('duplicate key')) {
+                            elizaLogger.info(`Account already exists for ${userId}, skipping creation`);
+                        } else {
+                            throw error;
+                        }
+                    }
+                } else {
+                    elizaLogger.info(`Account already exists for ${userId}, skipping creation`);
+                }
+            } catch (error) {
+                elizaLogger.error('Error in ensureUserExists:', error);
+                throw error;
+            } finally {
+                // Clean up the in-progress tracking
+                this.userCreationInProgress.delete(userId);
+            }
+        })();
+
+        // Store the promise
+        this.userCreationInProgress.set(userId, creationPromise);
+
+        // Wait for completion
+        return creationPromise;
+    }
+
+    async recordEvent(userId: UUID, eventName: string, value: string) {
+        try {
+            const account = await this.databaseAdapter.getAccountById(userId);
+            if (!account) {
+                elizaLogger.info(`No account found for ${userId}`);
+                return null;
+            } else {
+                elizaLogger.success(`Account found for ${userId} - ${account.customer_id}`);
+                const meterEvent = await recordStripeEvent({ customerId: account.customer_id, eventName: eventName, value: value });
+                elizaLogger.success(`Stripe event recorded for ${userId} - ${account.customer_id}: ${meterEvent}`);
+                return account;
+            }
+        } catch (error) {
+            elizaLogger.error('Error retrieving account:', error);
+            throw error;
+        }
+    }
+
+    async getBilling(userId: UUID, url: string) {
+        try {
+            const account = await this.databaseAdapter.getAccountById(userId);
+            if (!account) {
+                elizaLogger.info(`No account found for ${userId}`);
+                return null;
+            } else {
+                elizaLogger.success(`Account found for ${userId} - ${account.customer_id}`);
+                const checkoutSession = await getCheckoutSession({ customerId: account.customer_id, url: url || 'https://jent.ai' });
+                const portalSession = await getPortalSession({ customerId: account.customer_id, url: url || 'https://jent.ai' });
+                return { checkoutLink: checkoutSession, portalLink: portalSession };
+            }
+        } catch (error) {
+            elizaLogger.error('Error retrieving account:', error);
+            throw error;
         }
     }
 

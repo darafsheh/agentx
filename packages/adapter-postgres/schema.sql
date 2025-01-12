@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     "name" TEXT,
     "username" TEXT,
     "email" TEXT NOT NULL,
+    "customer_id" TEXT,
     "avatarUrl" TEXT,
     "details" JSONB DEFAULT '{}'::jsonb
 );

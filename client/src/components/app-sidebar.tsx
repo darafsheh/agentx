@@ -1,42 +1,72 @@
 import { Calendar, Home, Inbox, MessageCircle, Search, Settings } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
-
-
-// import {
-//     Sidebar,
-//     SidebarContent,
-//     SidebarGroup,
-//     SidebarGroupContent,
-//     SidebarGroupLabel,
-//     SidebarMenu,
-//     SidebarMenuButton,
-//     SidebarMenuItem,
-//     SidebarTrigger,
-// } from "@/components/ui/sidebar";
-
-// Menu items.
-const items = [
-    {
-        title: "Chat",
-        url: "",
-        icon: MessageCircle,
-        current: false
-    },
-    {
-        title: "Character Overview",
-        url: "character",
-        icon: Calendar,
-        current: false
-    },
-];
+import { useMutation } from "@tanstack/react-query";
+import { useEffect, useState, useMemo } from 'react'
 
 function classNames(...classes: (string | undefined | false | null)[]): string {
     return classes.filter(Boolean).join(' ')
-  }
+}
 
 export function AppSidebar() {
     const { agentId } = useParams();
+    const [billingData, setBillingData] = useState<any>(null);
+    const { user } = useUser();
+    const [items, setItems] = useState<any[]>([]);
+
+    useEffect(() => {
+        const initializeLayout = async () => {
+            try {
+                // Your initialization code here
+                initBillingMutation.mutate();
+            } catch (error) {
+                console.error('Failed to initialize layout:', error);
+            }
+        };
+
+        initializeLayout();
+    }, [user]);
+
+    useEffect(() => {
+        console.log('Current items:', items); // Log whenever items changes
+    }, [items]);
+
+    const initBillingMutation = useMutation({
+        mutationFn: async () => {
+            if (!user) throw new Error("No user found");
+
+            const res = await fetch(`/api/${agentId}/get-billing`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    url: window.location.href
+                }),
+            });
+            const billingData = await res.json();
+            if (billingData) {
+                console.log("Billing data:", billingData);
+                return billingData;
+            } else {
+                throw new Error('Failed to initialize session');
+            }
+        },
+        onSuccess: (data) => {
+            setBillingData(data);
+            // Set items after getting billing data
+            setItems([
+                {
+                    title: "Billing Portal",
+                    url: data.portalLink,
+                    icon: Calendar,
+                    current: false
+                },
+            ]);
+            console.log("Session initialized:", items);
+        },
+    });
 
     return (
         <nav className="flex flex-1 flex-col">
@@ -46,7 +76,7 @@ export function AppSidebar() {
                 {items.map((item) => (
                     <li key={item.title}>
                     <a
-                        href={`/${agentId}/${item.url}`}
+                        href={`${item.url}`}
                         className={classNames(
                         item.current
                             ? 'bg-gray-800 text-white'

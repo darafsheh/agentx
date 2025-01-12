@@ -381,13 +381,14 @@ export class PostgresDatabaseAdapter
             try {
                 const accountId = account.id ?? v4();
                 await this.pool.query(
-                    `INSERT INTO accounts (id, name, username, email, "avatarUrl", details)
-                    VALUES ($1, $2, $3, $4, $5, $6)`,
+                    `INSERT INTO accounts (id, name, username, email, customer_id, "avatarUrl", details)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7)`,
                     [
                         accountId,
                         account.name,
                         account.username || "",
                         account.email || "",
+                        account.customer_id || "",
                         account.avatarUrl || "",
                         JSON.stringify(account.details),
                     ]
