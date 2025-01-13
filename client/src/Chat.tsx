@@ -214,8 +214,8 @@ export default function Chat() {
                                         </div>
                                     ))
                                 ) : (
-                                    <div className="text-center text-muted-foreground">
-                                        No messages yet. Start a conversation!
+                                    <div className="text-center text-muted-foreground text-gray-300">
+                                        Start a conversation!
                                     </div>
                                 )}
                                 <div ref={messagesEndRef} />

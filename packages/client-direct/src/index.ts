@@ -113,6 +113,50 @@ export class DirectClient {
             return providedUserId || `browser-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
         };
 
+        // Initial user creation setup
+        this.app.post(
+            "/init-user",
+            async (req: express.Request, res: express.Response) => {
+                const { userId, name, email, customer_id, agentId } = req.body;
+                console.log("User ID: " + userId);
+
+                let runtime = this.agents.get(agentId);
+                console.log("runtime: " + runtime);
+
+                try {
+                    console.log("I am here");
+                    console.log(`userId: ${userId}`);
+                    console.log(`name: ${name}`);
+                    console.log(`email: ${email}`);
+                    console.log(`customer_id: ${customer_id}`);
+
+                    // Use stringToUuid on userId to ensure consistent UUID format
+                    const formattedUserId = stringToUuid(userId);
+
+                    // Create or ensure browser user exists
+                    await runtime.ensureUserExists(
+                        formattedUserId,
+                        email,         // username from Clerk
+                        name,         // display name from Clerk
+                        email,        // email from Clerk
+                        customer_id,
+                        'clerk'       // source
+                    );
+
+                    res.json({
+                        success: true,
+                        userId: userId
+                    });
+                } catch (error) {
+                    elizaLogger.error("Error initializing session:", error);
+                    res.status(500).json({
+                        success: false,
+                        error: "Failed to initialize session"
+                    });
+                }
+            }
+        );
+
         // New initialization endpoint
         this.app.post(
             "/:agentId/init-session",

@@ -1,8 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
-import { useNavigate, Link } from "react-router-dom";
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser } from '@clerk/clerk-react';
-import { useState } from 'react';
+import { useNavigate, Link, useParams } from "react-router-dom";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton, useUser, useAuth } from '@clerk/clerk-react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import {
     ArrowPathIcon,
@@ -18,7 +18,6 @@ import {
 import { CheckIcon } from '@heroicons/react/20/solid';
 import { BoltIcon, CalendarDaysIcon, UsersIcon } from '@heroicons/react/24/outline'
 import "./App.css";
-import Chat from './Chat.tsx';
 
 type Agent = {
     id: string;
@@ -108,7 +107,53 @@ function Agents() {
     // More people...
     ]
 
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [sessionInitialized, setSessionInitialized] = useState(false);
+
+    const { user } = useUser();
+    const { agentId } = useParams();
+    const { userId, isLoaded } = useAuth();
+
+      const initMutation = useMutation({
+        mutationFn: async () => {
+            if (!user) throw new Error("No user found");
+
+            const res = await fetch(`/api/init-user`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    userId: user.id,
+                    name: user.fullName || user.username,
+                    email: user.primaryEmailAddress?.emailAddress,
+                    agentId: agents?.[0]?.id
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                return { userId: user.id, roomId: data.roomId };
+            }
+            throw new Error('Failed to initialize session');
+        },
+        onSuccess: (data) => {
+            setSessionInitialized(true);
+        },
+    });
+
+    useEffect(() => {
+        if (isLoaded && userId) {
+            //hasInitialized.current = true;
+            console.log('New user signed up:', userId);
+            initMutation.mutate(); // Only runs once
+        }
+      }, [isLoaded, userId]);
+
+       // Wait for user data to be loaded
+        if (!isLoaded) {
+            return <div className="bg-gray-900 text-white mt-60">Loading...</div>;  // Show loading indicator while data is being fetched
+        }
 
     return (
         <div className="bg-gray-900">
@@ -258,7 +303,7 @@ function Agents() {
                       What's new
                     </span>
                     <span className="inline-flex items-center space-x-2 text-sm/6 font-medium text-gray-300">
-                      <span>01/06/25: Jent is live</span>
+                      <span>01/11/25: Jent is live</span>
                       {/* <ChevronRightIcon aria-hidden="true" className="size-5 text-gray-500" /> */}
                     </span>
                   </a>
